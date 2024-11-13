@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/fcesarr/graphql-go-handler"
 	"github.com/graphql-go/graphql/testutil"
-	"github.com/graphql-go/handler"
 )
 
 func TestRenderPlayground(t *testing.T) {
@@ -29,25 +29,25 @@ func TestRenderPlayground(t *testing.T) {
 		"doesn't render Playground if turned off": {
 			playgroundEnabled:   false,
 			accept:              "text/html",
-			expectedStatusCode:  http.StatusOK,
+			expectedStatusCode:  http.StatusInternalServerError,
 			expectedContentType: "application/json; charset=utf-8",
 		},
 		"doesn't render Playground if Content-Type application/json is present": {
 			playgroundEnabled:   true,
 			accept:              "application/json,text/html",
-			expectedStatusCode:  http.StatusOK,
+			expectedStatusCode:  http.StatusInternalServerError,
 			expectedContentType: "application/json; charset=utf-8",
 		},
 		"doesn't render Playground if Content-Type text/html is not present": {
 			playgroundEnabled:   true,
-			expectedStatusCode:  http.StatusOK,
+			expectedStatusCode:  http.StatusInternalServerError,
 			expectedContentType: "application/json; charset=utf-8",
 		},
 		"doesn't render Playground if 'raw' query is present": {
 			playgroundEnabled:   true,
 			accept:              "text/html",
 			url:                 "?raw",
-			expectedStatusCode:  http.StatusOK,
+			expectedStatusCode:  http.StatusInternalServerError,
 			expectedContentType: "application/json; charset=utf-8",
 		},
 	}

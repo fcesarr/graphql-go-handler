@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/fcesarr/graphql-go-handler"
 	"github.com/graphql-go/graphql/testutil"
-	"github.com/graphql-go/handler"
 )
 
 func TestRenderGraphiQL(t *testing.T) {
@@ -29,25 +29,25 @@ func TestRenderGraphiQL(t *testing.T) {
 		"doesn't render graphiQL if turned off": {
 			graphiqlEnabled:     false,
 			accept:              "text/html",
-			expectedStatusCode:  http.StatusOK,
+			expectedStatusCode:  http.StatusInternalServerError,
 			expectedContentType: "application/json; charset=utf-8",
 		},
 		"doesn't render GraphiQL if Content-Type application/json is present": {
 			graphiqlEnabled:     true,
 			accept:              "application/json,text/html",
-			expectedStatusCode:  http.StatusOK,
+			expectedStatusCode:  http.StatusInternalServerError,
 			expectedContentType: "application/json; charset=utf-8",
 		},
 		"doesn't render GraphiQL if Content-Type text/html is not present": {
 			graphiqlEnabled:     true,
-			expectedStatusCode:  http.StatusOK,
+			expectedStatusCode:  http.StatusInternalServerError,
 			expectedContentType: "application/json; charset=utf-8",
 		},
 		"doesn't render GraphiQL if 'raw' query is present": {
 			graphiqlEnabled:     true,
 			accept:              "text/html",
 			url:                 "?raw",
-			expectedStatusCode:  http.StatusOK,
+			expectedStatusCode:  http.StatusInternalServerError,
 			expectedContentType: "application/json; charset=utf-8",
 		},
 	}

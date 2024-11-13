@@ -12,11 +12,11 @@ import (
 
 	"context"
 
+	"github.com/fcesarr/graphql-go-handler"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/graphql/gqlerrors"
 	"github.com/graphql-go/graphql/language/location"
 	"github.com/graphql-go/graphql/testutil"
-	"github.com/graphql-go/handler"
 )
 
 func decodeResponse(t *testing.T, recorder *httptest.ResponseRecorder) *graphql.Result {
@@ -280,7 +280,7 @@ func TestHandler_BasicQuery_WithFormatErrorFn(t *testing.T) {
 		},
 	})
 	result, resp := executeTest(t, h, req)
-	if resp.Code != http.StatusOK {
+	if resp.Code != http.StatusInternalServerError {
 		t.Fatalf("unexpected server response %v", resp.Code)
 	}
 	if !formatErrorFnCalled {

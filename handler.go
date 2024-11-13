@@ -181,17 +181,23 @@ func (h *Handler) ContextHandler(ctx context.Context, w http.ResponseWriter, r *
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
 
 	var buff []byte
-	if h.pretty {
-		w.WriteHeader(http.StatusOK)
-		buff, _ = json.MarshalIndent(result, "", "\t")
 
-		w.Write(buff)
-	} else {
-		w.WriteHeader(http.StatusOK)
-		buff, _ = json.Marshal(result)
+	var data interface{} = result
 
-		w.Write(buff)
+	var statusCode = http.StatusOK
+
+	if result.HasErrors() {
+		statusCode = http.StatusInternalServerError
 	}
+	w.WriteHeader(statusCode)
+
+	if h.pretty {
+		buff, _ = json.MarshalIndent(data, "", "\t")
+	} else {
+		buff, _ = json.Marshal(data)
+	}
+
+	_, _ = w.Write(buff)
 
 	if h.resultCallbackFn != nil {
 		h.resultCallbackFn(ctx, &params, result, buff)
